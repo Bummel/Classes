@@ -30,5 +30,11 @@ public abstract class SingleTT extends TipTicket
 	public SingleTip getTip(){ return tip; }
 	
 	//SET METHODS
-	public abstract void setTip(SingleTip tip);
+	public void setTip(SingleTip tip){ this.tip = tip; }
+	
+	protected void setTip(SingleTip tip, Class<?> tipType)
+	{ 
+		assert tip.getClass() == tipType : "Wrong type given to SingleTT.setTip(SingleTip tip)! Expected: " + tipType.getSimpleName() + " !";
+		setTip(tip);
+	}
 }

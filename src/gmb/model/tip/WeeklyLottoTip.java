@@ -1,5 +1,4 @@
 package gmb.model.tip;
-import gmb.exception.WrongParameterTypeException;
 
 
 public class WeeklyLottoTip extends SingleTip 
@@ -13,22 +12,19 @@ public class WeeklyLottoTip extends SingleTip
 	{
 		super((SingleTT)tipTicket, groupTip);
 
-		try
-		{
-			if(tip.length == 9)
-				this.tip = tip;
-			else
-				throw new WrongParameterTypeException("WRONG TIP LENGTH GIVEN TO WeeklyLottoTip!");
-		}
-		catch(WrongParameterTypeException e)
-		{
-			e.printStackTrace();
-			
-			this.tip = new int[9];
-			for(int i=0; i<10; ++i)
-				this.tip[i] = 0;	
-		}
+		assert tip.length == 9 : "Wrong tip length (!=9) given to WeeklyLottoTip!";
+		this.tip = tip;
 	}
 
+	public boolean setTip(int[] tip)
+	{ 
+		assert tip.length == 9 : "Wrong tip length (!=9) given to DailyLottoTip.setTip(int[] tip)!";
+		
+		//check the date before continue! five minutes limit before evaluation of the draw!
+		this.tip = tip; 
+		
+		return true;
+	}
+	
 	public int[] getTip(){ return tip; }
 }

@@ -8,18 +8,12 @@ public class TotoEvaluation extends Draw
 {
 	private LinkedList<FootballGameResult> results;
 	
-	protected LinkedList<TotoTip> totoTips;
-	protected LinkedList<TotoGroupTip> totoGroupTips;
-	
 	@Deprecated
 	protected TotoEvaluation(){}
 
 	protected TotoEvaluation(DateTime planedEvaluationDate)
 	{
 		super(planedEvaluationDate);
-
-		totoTips = new LinkedList<TotoTip>();
-		totoGroupTips = new LinkedList<TotoGroupTip>();
 	}
 	
 	@Override
@@ -32,14 +26,11 @@ public class TotoEvaluation extends Draw
 	
 	public void addResult(FootballGameResult result){ results.add(result); }
 	
-	public void addTip(SingleTip tip){ totoTips.add((TotoTip)tip); }
-	public void addTip(GroupTip tip){ totoGroupTips.add((TotoGroupTip)tip); }
+	public boolean addTip(SingleTip tip){ return super.addTip(tip, TotoTip.class); }
+	public boolean addTip(GroupTip tip){ return super.addTip(tip, TotoGroupTip.class); }
 	
-	public void removeTip(SingleTip tip){ totoTips.remove((TotoTip)tip); }
-	public void removeTip(GroupTip tip){ totoGroupTips.remove((TotoGroupTip)tip); }
+	public boolean removeTip(SingleTip tip){ return super.removeTip(tip, TotoTip.class); }
+	public boolean removeTip(GroupTip tip){ return super.removeTip(tip, TotoGroupTip.class); }
 	
 	public LinkedList<FootballGameResult> getResults(){ return results; }
-	
-	public LinkedList<TotoTip> getTotoTips(){ return totoTips; }
-	public LinkedList<TotoGroupTip> getTotoGroupTips(){ return totoGroupTips; }
 }

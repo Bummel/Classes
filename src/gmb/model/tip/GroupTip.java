@@ -38,7 +38,7 @@ public abstract class GroupTip extends Tip
 		if(submitted) return true;
 		if(draw.getEvaluated()) return false;
 		
-		//check the date before continue! five minutes limit before evaluation of the draw!
+		if(draw.isTimeLeftUntilEvaluation())
 		if(overallMinimumStake >= currentOverallMinimumStake)
 		{
 			draw.addTip(this);
@@ -46,8 +46,8 @@ public abstract class GroupTip extends Tip
 			
 			return true;
 		}
-		else
-			return false;
+		
+		return false;
 	}
 	
 	/**
@@ -59,13 +59,17 @@ public abstract class GroupTip extends Tip
 		if(!submitted) return true;
 		if(draw.getEvaluated()) return false;
 
-		//check the date before continue! five minutes limit before evaluation of the draw!
-		draw.removeTip(this);
-		submitted = false;
+		if(draw.isTimeLeftUntilEvaluation())
+		{
+			draw.removeTip(this);
+			submitted = false;
 
-		return true;
+			return true;
+		}
+		else
+			return false;
 	}
-	
+
 	/**
 	 * add tips if the amount matches the "minimumStake" criteria, 
 	 * increment "currentOverallMinimumStake" by the amount of tips 
@@ -75,6 +79,7 @@ public abstract class GroupTip extends Tip
 	public boolean addTips(LinkedList<SingleTip> tips)
 	{
 		if(tips.size() == 0) return false;
+		if(!draw.isTimeLeftUntilEvaluation()) return false;
 		
 		int stake = getGroupMemberStake(tips.getFirst().getTipTicket().getOwner());
 		
@@ -96,9 +101,9 @@ public abstract class GroupTip extends Tip
 	 */
 	public int removeSingleTip(SingleTip tip)
 	{
-		if(!tips.contains(tip)) return 3;
+		if(!tips.contains(tip)) return 3;		
+		if(!draw.isTimeLeftUntilEvaluation()) return -1;
 		
-		//check the date before continue! five minutes limit before evaluation of the draw!
 		if(getGroupMemberStake(tip.getTipTicket().getOwner()) > minimumStake)
 		{	
 			if(currentOverallMinimumStake <= overallMinimumStake)
@@ -123,7 +128,8 @@ public abstract class GroupTip extends Tip
 	 */
 	public int removeAllTipsOfGroupMember(Customer groupMember)
 	{
-		//check the date before continue! five minutes limit before evaluation of the draw!
+		if(!draw.isTimeLeftUntilEvaluation()) return -1;
+		
 		int stake = getGroupMemberStake(groupMember);
 		
 		if(currentOverallMinimumStake - stake < overallMinimumStake)

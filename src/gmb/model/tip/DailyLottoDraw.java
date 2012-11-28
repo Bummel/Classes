@@ -1,15 +1,10 @@
 package gmb.model.tip;
 
-import java.util.LinkedList;
-
 import org.joda.time.DateTime;
 
 public class DailyLottoDraw extends Draw 
 {
 	protected int[] result;
-
-	protected LinkedList<DailyLottoTip> dailyLottoTips;	
-	protected LinkedList<DailyLottoGroupTip> dailyLottoGroupTips;
 
 	@Deprecated
 	protected DailyLottoDraw(){}
@@ -17,9 +12,6 @@ public class DailyLottoDraw extends Draw
 	protected DailyLottoDraw(DateTime planedEvaluationDate)
 	{
 		super(planedEvaluationDate);
-
-		dailyLottoTips = new LinkedList<DailyLottoTip>();
-		dailyLottoGroupTips = new LinkedList<DailyLottoGroupTip>();
 	}
 
 	@Override
@@ -30,16 +22,17 @@ public class DailyLottoDraw extends Draw
 		return false;
 	}
 	
-	public void setResult(int[] result){ this.result = result; }
+	public void setResult(int[] result)
+	{ 
+		assert result.length == 10 : "Wrong result length (!=10) given to DailyLottoDraw.setResult(int[] result)!";
+		this.result = result; 
+	}
 	
-	public void addTip(SingleTip tip){ dailyLottoTips.add((DailyLottoTip)tip); }
-	public void addTip(GroupTip tip){ dailyLottoGroupTips.add((DailyLottoGroupTip)tip); }
+	public boolean addTip(SingleTip tip){ return super.addTip(tip, DailyLottoTip.class); }
+	public boolean addTip(GroupTip tip){ return super.addTip(tip, DailyLottoGroupTip.class); }
 	
-	public void removeTip(SingleTip tip){ dailyLottoTips.remove((DailyLottoTip)tip); }
-	public void removeTip(GroupTip tip){ dailyLottoGroupTips.remove((DailyLottoGroupTip)tip); }
+	public boolean removeTip(SingleTip tip){ return super.removeTip(tip, DailyLottoTip.class); }
+	public boolean removeTip(GroupTip tip){ return super.removeTip(tip, DailyLottoGroupTip.class); }
 	
 	public int[] getResult(){ return result; }
-	
-	public LinkedList<DailyLottoTip> getDailyLottoTips(){ return dailyLottoTips; }
-	public LinkedList<DailyLottoGroupTip> getDailyLottoGroupTips(){ return dailyLottoGroupTips; }
 }

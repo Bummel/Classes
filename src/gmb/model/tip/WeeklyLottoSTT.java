@@ -1,6 +1,5 @@
 package gmb.model.tip;
 
-import gmb.exception.WrongParameterTypeException;
 import gmb.model.user.Customer;
 
 public class WeeklyLottoSTT extends SingleTT 
@@ -15,21 +14,5 @@ public class WeeklyLottoSTT extends SingleTT
 	}
 
 	@Override
-	public void setTip(SingleTip tip) 
-	{
-		try 
-		{
-			if(tip instanceof WeeklyLottoTip)
-			{
-				this.tip = tip;
-			} 
-			else
-				throw new WrongParameterTypeException("WRONG TIP-TYPE GIVEN TO WeeklyLottoSTT!");
-
-		} 
-		catch (WrongParameterTypeException e) 
-		{
-			e.printStackTrace();
-		}
-	}
+	public void setTip(SingleTip tip){ super.setTip(tip, WeeklyLottoTip.class);}
 }

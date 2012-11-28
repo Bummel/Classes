@@ -1,6 +1,5 @@
 package gmb.model.tip;
 
-import gmb.exception.WrongParameterTypeException;
 import gmb.model.user.Customer;
 
 public class WeeklyLottoPTT extends PermaTT 
@@ -9,27 +8,11 @@ public class WeeklyLottoPTT extends PermaTT
 	@Deprecated
 	protected WeeklyLottoPTT(){}
 
-	public WeeklyLottoPTT(Customer owner)
+	public WeeklyLottoPTT(Customer owner, PTTDuration duration)
 	{
-		super(owner);
+		super(owner, duration);
 	}
 
 	@Override
-	public void addTip(SingleTip tip) 
-	{
-		try 
-		{
-			if(tip instanceof WeeklyLottoTip)
-			{
-				tips.add(tip);
-			} 
-			else
-				throw new WrongParameterTypeException("WRONG TIP-TYPE GIVEN TO WeeklyLottoPTT!");
-
-		} 
-		catch (WrongParameterTypeException e) 
-		{
-			e.printStackTrace();
-		}
-	}
+	public boolean addTip(SingleTip tip){ return super.addTip(tip, WeeklyLottoTip.class); }
 }

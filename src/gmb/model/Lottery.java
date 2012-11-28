@@ -1,11 +1,7 @@
 package gmb.model;
 
-import java.math.BigDecimal;
-
-import gmb.exception.NoExistingSingletonInstanceException;
 import gmb.model.financial.FinancialManagement;
-import gmb.model.financial.ReceiptsDistribution;
-import gmb.model.financial.TipTicketPrices;
+
 import gmb.model.tip.TipManagement;
 import gmb.model.user.GroupManagement;
 import gmb.model.user.MemberManagement;
@@ -45,18 +41,8 @@ public class Lottery
 
 	public static Lottery getInstance()
 	{
-		try
-		{
-			if(INSTANCE != null) return INSTANCE;
-			else
-				throw new NoExistingSingletonInstanceException("LOTTERY INSTANCE DOES NOT EXIST!");
-		}
-		catch(NoExistingSingletonInstanceException e)
-		{
-			e.printStackTrace();
-			return new Lottery(new FinancialManagement(new TipTicketPrices(new BigDecimal(9999999),new BigDecimal(9999999),new BigDecimal(9999999),new BigDecimal(9999999),new BigDecimal(9999999)), 
-					new ReceiptsDistribution(50, 27, 20, 3)), new MemberManagement(), new GroupManagement(), new TipManagement(0));
-		}
+		assert INSTANCE != null : "LOTTERY INSTANCE DOES NOT EXIST!";
+		return INSTANCE;
 	}
 
 	public FinancialManagement getFinancialManagement(){ return financialManagement; }

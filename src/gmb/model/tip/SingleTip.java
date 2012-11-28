@@ -29,7 +29,8 @@ public abstract class SingleTip extends Tip
 		int result = super.withdraw();//draw already evaluated?		
 		if(result != 0) return result;
 		
-		//check the date before continue! five minutes limit before evaluation of the draw!
+		if(!draw.isTimeLeftUntilEvaluation()) return -1;
+		
 		tipTicket.removeTip(this);
 		
 		if(groupTip == null)

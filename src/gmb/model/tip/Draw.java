@@ -6,6 +6,7 @@ import gmb.model.financial.Winnings;
 import java.util.LinkedList;
 
 import org.joda.time.DateTime;
+import org.joda.time.Duration;
 
 
 public abstract class Draw 
@@ -16,6 +17,9 @@ public abstract class Draw
 	
 	protected LinkedList<Winnings> winnings;
 	
+	protected LinkedList<SingleTip> singleTips;
+	protected LinkedList<GroupTip> groupTips;
+	
 	@Deprecated
 	protected Draw(){}
 	
@@ -23,6 +27,9 @@ public abstract class Draw
 	{
 		this.planedEvaluationDate = planedEvaluationDate;
 		winnings =  new LinkedList<Winnings>();
+		
+		singleTips = new LinkedList<SingleTip>();
+		groupTips = new LinkedList<GroupTip>();
 	}
 
 	public boolean evaluate()
@@ -33,11 +40,80 @@ public abstract class Draw
 		return true;
 	}
 	
-	public abstract void addTip(SingleTip tip);
-	public abstract void addTip(GroupTip tip);
+	public boolean isTimeLeftUntilEvaluation()
+	{
+		Duration duration = new Duration(planedEvaluationDate, Lottery.getInstance().getTimer().getDateTime());
+		return duration.isLongerThan(Lottery.getInstance().getTipManagement().getTipSubmissionTimeLimit());		
+	}
 	
-	public abstract void removeTip(SingleTip tip);
-	public abstract void removeTip(GroupTip tip);
+	public boolean addTip(SingleTip tip)
+	{ 
+		if(isTimeLeftUntilEvaluation())
+		{
+			singleTips.add(tip); 
+			return true;
+		}
+		else 
+			return false;
+	}
+	
+	public boolean addTip(GroupTip tip)
+	{ 
+		if(isTimeLeftUntilEvaluation())
+		{
+			groupTips.add(tip); 
+			return true;
+		}
+		else 
+			return false;
+	}
+	
+	public boolean removeTip(SingleTip tip)
+	{ 
+		if(isTimeLeftUntilEvaluation())
+			return singleTips.remove(tip); 
+		else 
+			return false;
+	}
+	
+	public boolean removeTip(GroupTip tip)
+	{ 
+		if(isTimeLeftUntilEvaluation())
+			return groupTips.remove(tip); 
+		else 
+			return false;
+	}
+	
+	//////////////////////////////////////////////////////////check for correct type://
+	//===============================================================================//
+	protected boolean addTip(SingleTip tip, Class<?> tipType)
+	{ 		
+		assert tip.getClass() == tipType : "Wrong type given to Draw.addTip(SingleTip tip)! Expected: " + tipType.getSimpleName() + " !";
+		return addTip(tip);
+	}
+	
+	protected boolean addTip(GroupTip tip, Class<?> tipType)
+	{ 	
+		assert tip.getClass() == tipType : "Wrong type given to Draw.addTip(GroupTip tip)! Expected: " + tipType.getSimpleName() + " !";
+		return addTip(tip);
+	}
+
+	protected boolean removeTip(SingleTip tip, Class<?> tipType)
+	{ 	
+		assert tip.getClass() == tipType : "Wrong type given to Draw.removeTip(SingleTip tip)! Expected: " + tipType.getSimpleName() + " !";
+		return removeTip(tip); 
+	}
+	
+	protected boolean removeTip(GroupTip tip, Class<?> tipType)
+	{ 	
+		assert tip.getClass() == tipType : "Wrong type given to Draw.removeTip(GroupTip tip)! Expected: " + tipType.getSimpleName() + " !";
+		return removeTip(tip);
+	}	 
+	//===============================================================================//
+	///////////////////////////////////////////////////////////////////////////////////
+
+	public LinkedList<SingleTip> getWeeklyLottoTips(){ return singleTips; }
+	public LinkedList<GroupTip> getWeeklyLottoGroupTips(){ return groupTips; }
 	
 	public boolean getEvaluated(){ return evaluated; }
 	public LinkedList<Winnings> getWinnings(){ return winnings; }
